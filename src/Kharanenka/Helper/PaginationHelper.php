@@ -15,6 +15,7 @@ class PaginationHelper {
     const NEXT_MORE_BUTTON_CODE = 'next-more';
     const LAST_BUTTON_CODE = 'last';
     const LAST_MORE_BUTTON_CODE = 'last-more';
+    const ACT_BUTTON_CODE = 'act';
 
     protected static $arResult = [];
     protected static $iCurrentPage;
@@ -128,9 +129,11 @@ class PaginationHelper {
             while($i < $iElementLimit) {
 
                 //Set active page button
+                $sCode = null;
                 $sElementClass = self::$arSettings['main_button_class'];
                 if(self::$iPosition == self::$iCurrentPage) {
                     $sElementClass = ' '.self::$arSettings['active_class'];
+                    $sCode = self::ACT_BUTTON_CODE;
                 }
 
                 if(self::$iPosition > 0) {
@@ -138,7 +141,7 @@ class PaginationHelper {
                         'name' => self::$iPosition,
                         'value' => self::$iPosition,
                         'class' => $sElementClass,
-                        'code' => null,
+                        'code' => $sCode,
                     ];
 
                     $i++;
