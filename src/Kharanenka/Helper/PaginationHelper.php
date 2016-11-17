@@ -15,6 +15,7 @@ class PaginationHelper {
     const NEXT_MORE_BUTTON_CODE = 'next-more';
     const LAST_BUTTON_CODE = 'last';
     const LAST_MORE_BUTTON_CODE = 'last-more';
+    const MAIN_BUTTON_CODE = 'main';
     const ACT_BUTTON_CODE = 'act';
 
     protected static $arResult = [];
@@ -27,29 +28,26 @@ class PaginationHelper {
         'count_per_page' => 10,
         'pagination_limit' => 5,
         'active_class' => '_act',
+        'button_list' => [self::MAIN_BUTTON_CODE],
 
         //Button "First"
-        'first_button_on' => false,                     // Switch on/off button
         'first_button_name' => 'First',                 // Button name
         'first_button_limit' => 1,                      // Show button if current page > this value
         'first_button_number' => false,                 // true - button name = page number
         'first_button_class' => null,                   // Button class
 
         //Button "First-More"
-        'first-more_button_on' => false,                // Switch on/off button
         'first-more_button_name' => '...',              // Button name
         'first-more_button_limit' => 1,                 // Show button if current page > this value
         'first-more_button_class' => null,              // Button class
 
         //Button "Prev"
-        'prev_button_on' => false,                      // Switch on/off button
         'prev_button_name' => 'Prev',                   // Button name
         'prev_button_limit' => 1,                       // Show button if current page > this value
         'prev_button_number' => false,                  // true - button name = page number
         'prev_button_class' => null,                    // Button class
 
         //Button "Prev-More"
-        'prev-more_button_on' => false,                 // Switch on/off button
         'prev-more_button_name' => '...',               // Button name
         'prev-more_button_limit' => 1,                  // Show button if current page > this value
         'prev-more_button_class' => null,               // Button class
@@ -59,26 +57,22 @@ class PaginationHelper {
         'main_button_class' => null,                    // Button class
 
         //Button "Next-More"
-        'next-more_button_on' => false,                 // Switch on/off button
         'next-more_button_name' => '...',               // Button name
         'next-more_button_limit' => 1,                  // Show button if current page + this value <= total page count
         'next-more_button_class' => null,               // Button class
 
         //Button "Next"
-        'next_button_on' => false,                      // Switch on/off button
         'next_button_name' => 'Next',                   // Button name
         'next_button_limit' => 1,                       // Show button if current page + this value <= total page count
         'next_button_number' => false,                  // true - button name = page number
         'next_button_class' => null,                    // Button class
 
         //Button "Last-More"
-        'last-more_button_on' => false,                 // Switch on/off button
         'last-more_button_name' => '...',               // Button name
         'last-more_button_limit' => 1,                  // Show button if current page + this value <= total page count
         'last-more_button_class' => null,               // Button class
 
         //Button "Last"
-        'last_button_on' => false,                      // Switch on/off button
         'last_button_name' => 'Last',                   // Button name
         'last_button_limit' => 1,                       // Show button if current page + this value <= total page count
         'last_button_number' => false,                  // true - button name = page number
@@ -96,6 +90,9 @@ class PaginationHelper {
 
         self::$iCurrentPage = $iCurrentPage;
         self::initSettings($arSettings);
+        if(empty(self::$arSettings['button_list'])) {
+            self::$arResult;
+        }
 
         //Get count per page elements
         $iCountPerPage = self::$arSettings['count_per_page'];
@@ -118,46 +115,68 @@ class PaginationHelper {
             self::$iPosition = 1;
         }
 
-        self::addPrevButton(self::FIRST_BUTTON_CODE);
-        self::addPrevButton(self::FIRST_MORE_BUTTON_CODE);
-        self::addPrevButton(self::PREV_BUTTON_CODE);
-        self::addPrevButton(self::PREV_MORE_BUTTON_CODE);
+        foreach(self::$arSettings['button_list'] as $sButtonCode) {
 
-        if(self::$arSettings['main_button_on']) {
-            //Get pagination buttons
-            $i = 0;
-            while($i < $iElementLimit) {
-
-                //Set active page button
-                $sCode = null;
-                $sElementClass = self::$arSettings['main_button_class'];
-                if(self::$iPosition == self::$iCurrentPage) {
-                    $sElementClass = ' '.self::$arSettings['active_class'];
-                    $sCode = self::ACT_BUTTON_CODE;
-                }
-
-                if(self::$iPosition > 0) {
-                    self::$arResult[] = [
-                        'name' => self::$iPosition,
-                        'value' => self::$iPosition,
-                        'class' => $sElementClass,
-                        'code' => $sCode,
-                    ];
-
-                    $i++;
-                }
-
-                self::$iPosition++;
-                if(self::$iPosition > self::$iTotalCountPages) {
+            switch($sButtonCode) {
+                case self::FIRST_BUTTON_CODE:
+                    self::addPrevButton(self::FIRST_BUTTON_CODE);
                     break;
-                }
+                case self::FIRST_MORE_BUTTON_CODE:
+                    self::addPrevButton(self::FIRST_MORE_BUTTON_CODE);
+                    break;
+                case self::PREV_BUTTON_CODE:
+                    self::addPrevButton(self::PREV_BUTTON_CODE);
+                    break;
+                case self::PREV_MORE_BUTTON_CODE:
+                    self::addPrevButton(self::PREV_MORE_BUTTON_CODE);
+                    break;
+                case self::MAIN_BUTTON_CODE:
+
+                    if(self::$arSettings['main_button_on']) {
+                        //Get pagination buttons
+                        $i = 0;
+                        while($i < $iElementLimit) {
+
+                            //Set active page button
+                            $sCode = null;
+                            $sElementClass = self::$arSettings['main_button_class'];
+                            if(self::$iPosition == self::$iCurrentPage) {
+                                $sElementClass = ' '.self::$arSettings['active_class'];
+                                $sCode = self::ACT_BUTTON_CODE;
+                            }
+
+                            if(self::$iPosition > 0) {
+                                self::$arResult[] = [
+                                    'name' => self::$iPosition,
+                                    'value' => self::$iPosition,
+                                    'class' => $sElementClass,
+                                    'code' => $sCode,
+                                ];
+
+                                $i++;
+                            }
+
+                            self::$iPosition++;
+                            if(self::$iPosition > self::$iTotalCountPages) {
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case self::NEXT_MORE_BUTTON_CODE:
+                    self::addNextButton(self::NEXT_MORE_BUTTON_CODE);
+                    break;
+                case self::NEXT_BUTTON_CODE:
+                    self::addNextButton(self::NEXT_BUTTON_CODE);
+                    break;
+                case self::LAST_MORE_BUTTON_CODE:
+                    self::addNextButton(self::LAST_MORE_BUTTON_CODE);
+                    break;
+                case self::LAST_BUTTON_CODE:
+                    self::addNextButton(self::LAST_BUTTON_CODE);
+                    break;
             }
         }
-
-        self::addNextButton(self::NEXT_MORE_BUTTON_CODE);
-        self::addNextButton(self::NEXT_BUTTON_CODE);
-        self::addNextButton(self::LAST_MORE_BUTTON_CODE);
-        self::addNextButton(self::LAST_BUTTON_CODE);
 
         return self::$arResult;
     }
@@ -183,7 +202,7 @@ class PaginationHelper {
      */
     protected static function addPrevButton($sCode) {
 
-        if(!self::$arSettings[$sCode.'_button_on'] || self::$iCurrentPage <= self::$arSettings[$sCode.'_button_limit']) {
+        if(self::$iCurrentPage <= self::$arSettings[$sCode.'_button_limit']) {
             return;
         }
 
@@ -210,7 +229,7 @@ class PaginationHelper {
      */
     protected static function addNextButton($sCode) {
 
-        if(!self::$arSettings[$sCode.'_button_on'] || self::$iCurrentPage + self::$arSettings[$sCode.'_button_limit'] > self::$iTotalCountPages) {
+        if(self::$iCurrentPage + self::$arSettings[$sCode.'_button_limit'] > self::$iTotalCountPages) {
             return;
         }
 
