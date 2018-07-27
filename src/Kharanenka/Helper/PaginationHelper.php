@@ -117,6 +117,8 @@ class PaginationHelper {
             self::$iPosition = 1;
         }
 
+        $arMainPageList = [];
+
         foreach(self::$arSettings['button_list'] as $sButtonCode) {
 
             switch($sButtonCode) {
@@ -155,6 +157,8 @@ class PaginationHelper {
                                     'code' => $sCode,
                                 ];
 
+                                $arMainPageList[] = self::$iPosition;
+
                                 $i++;
                             }
 
@@ -177,6 +181,30 @@ class PaginationHelper {
                 case self::LAST_BUTTON_CODE:
                     self::addNextButton(self::LAST_BUTTON_CODE);
                     break;
+            }
+        }
+
+        $arUnsetCodeList = [];
+        foreach (self::$arResult as $iKey => $arButtonData) {
+            if ($arButtonData['code'] == self::ACT_BUTTON_CODE || empty($arButtonData['code'])) {
+                continue;
+            }
+
+            if (!in_array($arButtonData['value'], $arMainPageList)) {
+                continue;
+            }
+
+            $arUnsetCodeList[] = $arButtonData['code'];
+            $arUnsetCodeList[] = $arButtonData['code'].'-more';
+        }
+
+        if (!empty($arUnsetCodeList)) {
+            foreach (self::$arResult as $iKey => $arButtonData) {
+                if (!in_array($arButtonData['code'], $arUnsetCodeList)) {
+                    continue;
+                }
+
+                unset(self::$arResult[$iKey]);
             }
         }
 
