@@ -190,6 +190,10 @@ class PaginationHelper {
                 continue;
             }
 
+            if (!in_array($arButtonData['code'], [self::FIRST_BUTTON_CODE, self::FIRST_MORE_BUTTON_CODE, self::LAST_BUTTON_CODE, self::LAST_MORE_BUTTON_CODE])) {
+                continue;
+            }
+
             if (!in_array($arButtonData['value'], $arMainPageList)) {
                 continue;
             }
