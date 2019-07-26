@@ -1,10 +1,10 @@
 # Class PaginationHelper
- 
+
  You can get pagination elements with "PaginationHelper" class
- 
-#Installation
+
+# Installation
 Require this package in your `composer.json` and update composer.
- 
+
 ```php
 
 "kharanenka/php-pagination": "2.0.*"
@@ -15,10 +15,10 @@ Require this package in your `composer.json` and update composer.
 ```php
 
  $arPagination = PaginationHelper::get($iCurrentPage, $iTotalCount, $arSettings);
- 
+
 ```
 
-#Result
+# Result
 ```php
 
 [
@@ -46,7 +46,7 @@ Require this package in your `composer.json` and update composer.
 
 ```
 
-#Default settings
+# Default settings
 ```php
 
 $arSettings = [
@@ -68,10 +68,10 @@ $arSettings = [
                                                     // ['prev', 'main', 'next']
                                                     // ['first', 'prev', 'main', 'next', 'last']
                                                     // ['prev', 'first', 'main', 'last', 'next']
-        
+
         'count_per_page' => 10,                     // Count elements per page
         'pagination_limit' => 5,                    // Count main pagination buttons
-        'active_class' => '_act',                   // Button class for active page 
+        'active_class' => '_act',                   // Button class for active page
 
         //Button "First"
         'first_button_name' => 'First',             // Button name
